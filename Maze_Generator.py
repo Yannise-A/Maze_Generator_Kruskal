@@ -38,39 +38,35 @@ def init_pixel(): #placer les pixels
     #print(pixel)
 
 def create_maze(): #Kruskal's algorithm
-    pixel[0][1] = 1 
-    pixel[maze_size-1][maze_size-2] = nb
+    pixel[0][1] = 0 
     while is_finished() == True:
         x = random.randint(0, len(pixel)-2)
         y = random.randint(0, len(pixel)-2)
         if pixel[x][y] == -1:
-            if check(x,y) != []:
-                print(check(x,y))
-                dir = random.choice(check(x,y))
-                if dir == "HORIZONTALE":
-                    if pixel[x+1][y] > pixel[x-1][y]:
-                        pixel[x][y] = pixel[x-1][y]
-                        pixel[x+1][y] = pixel[x-1][y]
-                    else:
-                        pixel[x][y] = pixel[x+1][y]
-                        pixel[x-1][y] = pixel[x+1][y]
-                if dir == "VERTICALE":
-                    if pixel[x][y-1] > pixel[x][y+1]:
-                        pixel[x][y] = pixel[x][y+1]
-                        pixel[x][y-1] = pixel[x][y+1]
-                    else:
-                        pixel[x][y] = pixel[x][y-1]
-                        pixel[x][y+1] = pixel[x][y-1]
+            check(x,y)
             draw()
+    pixel[maze_size-1][maze_size-2] = nb
 
 
 def check(x,y):
-    Liste =[]
-    if pixel[x-1][y] >= 0 and pixel[x+1][y]>= 0 and pixel[x-1][y] != pixel[x+1][y]:
-        Liste.append("HORIZONTALE")
-    elif pixel[x][y-1] == 0 and pixel[x][y+1] == 0 and pixel[x][y-1] != pixel[x][y+1]:
-        Liste.append("VERTICALE")
-    return Liste
+    div = x % 2
+    if div == 0:
+        if pixel[x-1][y] >= 0 and pixel[x+1][y]>= 0 and pixel[x-1][y] != pixel[x+1][y]:
+            if pixel[x+1][y] > pixel[x-1][y]:
+                pixel[x][y] = pixel[x-1][y]
+                pixel[x+1][y] = pixel[x-1][y]
+            else:
+                pixel[x][y] = pixel[x+1][y]
+                pixel[x-1][y] = pixel[x+1][y]
+    else:
+        if pixel[x][y-1] >= 0 and pixel[x][y+1] >= 0 and pixel[x][y-1] != pixel[x][y+1]:
+            if pixel[x][y-1] > pixel[x][y+1]:
+                pixel[x][y] = pixel[x][y+1]
+                pixel[x][y-1] = pixel[x][y+1]
+            else:
+                pixel[x][y] = pixel[x][y-1]
+                pixel[x][y+1] = pixel[x][y-1]
+
 
 
 
