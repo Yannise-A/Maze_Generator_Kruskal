@@ -45,7 +45,7 @@ def create_maze(): #Kruskal's algorithm
         y = random.randint(0, len(pixel)-2)
         if pixel[x][y] == -1:
             check(x,y)
-            print("================================",pixel)
+            print("================================\n",pixel)
             draw()
     pixel[maze_size-1][maze_size-2] = nb
 
@@ -61,8 +61,8 @@ def check(x,y):
                 pixel[x+1][y] = pixel[x-1][y]
                 for i in range(maze_size):
                     for j in range(maze_size):
-                        if pixel[i][j] == cell2 : 
-                            pixel[i][j] = cell1
+                        if pixel[i][j] == cell1 : 
+                            pixel[i][j] = cell2
             else:
                 cell1 = pixel[x-1][y]
                 cell2 = pixel[x+1][y]
@@ -70,8 +70,8 @@ def check(x,y):
                 pixel[x-1][y] = pixel[x+1][y]
                 for i in range(maze_size):
                     for j in range(maze_size):
-                        if pixel[i][j] == cell2 : 
-                            pixel[i][j] = cell1
+                        if pixel[i][j] == cell1 : 
+                            pixel[i][j] = cell2
     else:
         if pixel[x][y-1] >= 0 and pixel[x][y+1] >= 0 and pixel[x][y-1] != pixel[x][y+1]:
             if pixel[x][y-1] > pixel[x][y+1]:
