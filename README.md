@@ -1,2 +1,2 @@
-# Maze_Generator_Kruskal
+# Maze Generator with the Kruskal algorithm 
  
