@@ -45,7 +45,7 @@ def create_maze(): #Kruskal's algorithm
         y = random.randint(0, len(pixel)-2)
         if pixel[x][y] == -1:
             check(x,y)
-            print("================================\n",pixel)
+            print("================================",pixel)
             draw()
     pixel[maze_size-1][maze_size-2] = nb
 
@@ -93,9 +93,17 @@ def check(x,y):
                         if pixel[i][j] == cell2 : 
                             pixel[i][j] = cell1
 
-
-
-
+def complexe(): #rends le labyrinthe complexe
+    for i in range(maze_size):
+        x = random.randint(1,maze_size-1)
+        y = random.randint(1,maze_size-1)
+        if pixel[x][y] == False: 
+            if pixel[x][y+1] == False and pixel[x][y-1] == False and pixel[x-1][y] == True and pixel[x+1][y] == True:
+                pixel[x][y] = True
+                draw()
+            if pixel[x-1][y] == False and pixel[x-1][y] == False and pixel[x][y-1] == True and pixel[x][y+1] == True:
+                pixel[x][y] = True
+                draw()
 
 def is_finished():
     for ligne in pixel:
@@ -129,6 +137,7 @@ fenetre.minsize(cote*maze_size,cote*maze_size)
 fenetre.maxsize(cote*maze_size,cote*maze_size)
 canvas.pack()
 init()
+complexe()
 draw()
 print(""" 
     ======================
