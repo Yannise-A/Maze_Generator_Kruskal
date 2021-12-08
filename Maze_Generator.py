@@ -49,25 +49,42 @@ def create_maze(): #Kruskal's algorithm
 
 
 def check(x,y):
+    draw()
     div = x % 2
     if div == 0:
         if pixel[x-1][y] >= 0 and pixel[x+1][y]>= 0 and pixel[x-1][y] != pixel[x+1][y]:
             if pixel[x+1][y] > pixel[x-1][y]:
                 pixel[x][y] = pixel[x-1][y]
                 pixel[x+1][y] = pixel[x-1][y]
+                replace(x+1,y,pixel[x-1][y])
             else:
                 pixel[x][y] = pixel[x+1][y]
                 pixel[x-1][y] = pixel[x+1][y]
+                replace(x-1,y,pixel[x+1][y])
     else:
         if pixel[x][y-1] >= 0 and pixel[x][y+1] >= 0 and pixel[x][y-1] != pixel[x][y+1]:
             if pixel[x][y-1] > pixel[x][y+1]:
                 pixel[x][y] = pixel[x][y+1]
                 pixel[x][y-1] = pixel[x][y+1]
+                replace(x,y-1,pixel[x][y+1])
             else:
                 pixel[x][y] = pixel[x][y-1]
                 pixel[x][y+1] = pixel[x][y-1]
+                replace(x,y+1,pixel[x][y-1])
 
-
+def replace(x,y,ref):
+    if pixel[x+1,y] != ref and pixel[x+1,y] != -1:
+        pixel[x+1,y] = ref
+        replace(x+1,y,ref)
+    if pixel[x-1,y] != ref and pixel[x-1,y] != -1:
+        pixel[x-1,y] = ref
+        replace(x-1,y,ref)
+    if pixel[x,y-1] != ref and pixel[x,y-1] != -1:
+        pixel[x,y-1] = ref
+        replace(x,y-1,ref)
+    if pixel[x,y+1] != ref and pixel[x,y+1] != -1:
+        pixel[x,y+1] = ref
+        replace(x,y-1,ref)
 
 
 
