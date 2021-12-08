@@ -38,39 +38,43 @@ def init_pixel(): #placer les pixels
     #print(pixel)
 
 def create_maze(): #Kruskal's algorithm
-    while is_finished() == True:
-        x = random.randint(1, len(pixel) - 2)
-        print("X=",x)
-        y = 0
-        if (x % 2 == 0):
-            y = random.randint(1, len(pixel) - 2) 
-            print("Y=",y)
-        else:
-            y = random.randint(1, len(pixel) - 2) 
-            print("Y=",y)
-
-
-        cell_1=0
-        cell_2=0
-        if pixel[y][x-1] == -1:
-            cell_1= pixel[y-1][x]
-            #print("Cell1-1=",cell_1)
-            cell_2= pixel[y+1][x]
-            #print("Cell2-1=",cell_2)
-        else:
-            cell_1= pixel[y][x-1]
-            #print("Cell1=",cell_1)
-            cell_2= pixel [y][x+1]
-            #print("Cell2=",cell_2)
-                        
-        if cell_1 != cell_2:
-            pixel[y][x] = 0
-            for i in range(1,maze_size-1,2):
-                for j in range(1,maze_size-1,2):
-                    if pixel[i][j] == cell_2:
-                        pixel[i][j] = cell_1        
     pixel[0][1] = 1 
     pixel[maze_size-1][maze_size-2] = nb
+    while is_finished() == True:
+        x = random.randint(0, len(pixel)-2)
+        y = random.randint(0, len(pixel)-2)
+        if pixel[x][y] == -1:
+            if check(x,y) != []:
+                print(check(x,y))
+                dir = random.choice(check(x,y))
+                if dir == "HORIZONTALE":
+                    if pixel[x+1][y] > pixel[x-1][y]:
+                        pixel[x][y] = pixel[x-1][y]
+                        pixel[x+1][y] = pixel[x-1][y]
+                    else:
+                        pixel[x][y] = pixel[x+1][y]
+                        pixel[x-1][y] = pixel[x+1][y]
+                if dir == "VERTICALE":
+                    if pixel[x][y-1] > pixel[x][y+1]:
+                        pixel[x][y] = pixel[x][y+1]
+                        pixel[x][y-1] = pixel[x][y+1]
+                    else:
+                        pixel[x][y] = pixel[x][y-1]
+                        pixel[x][y+1] = pixel[x][y-1]
+            draw()
+
+
+def check(x,y):
+    Liste =[]
+    if pixel[x-1][y] >= 0 and pixel[x+1][y]>= 0 and pixel[x-1][y] != pixel[x+1][y]:
+        Liste.append("HORIZONTALE")
+    elif pixel[x][y-1] == 0 and pixel[x][y+1] == 0 and pixel[x][y-1] != pixel[x][y+1]:
+        Liste.append("VERTICALE")
+    return Liste
+
+
+
+
 
 
 def is_finished():
@@ -85,7 +89,8 @@ def is_finished():
 def rgb(rgb):
     return "#%02x%02x%02x" % rgb
     
-def dessiner():
+def draw():
+    fenetre.update()
     for y in range(maze_size):
         for x in range(maze_size):
             if pixel[x][y] >= 0:
@@ -93,48 +98,7 @@ def dessiner():
             elif pixel[x][y] == -1:
                 coul = "black"
             canvas.itemconfig(case[x][y], fill=coul)
-
-
-def score_boxes(pixel):
-    color = 1
-    temp = pixel
-    distance = 1
-    pixel[maze_size - 1][maze_size - 2] = 1
-    canvas.itemconfig(case[maze_size - 1][maze_size - 2], fill=rgb((255,255,0)))
-    while pixel[1][1] == 0:
-        distance += 1
-        for i in range (0,maze_size - 2,-1):
-            for j in range (0,maze_size - 2,-1):
-                if pixel[i][j] == 0 : 
-                    if pixel[i][j - 1]  > 0 or pixel[i][j + 1] > 0 or pixel[i - 1][j] >  0 or pixel[i + 1][j] > 0:
-                        temp[i][j] = distance
-                        color += 1
-                        canvas.itemconfig(case[i][j], fill=rgb((color * 1.5,color * 1.5,color * 1.5)))
-    pixel = temp
                         
-
-
-def maze_solver():
-    x = 1 
-    y = 1
-    while x != maze_size - 2 or y != maze_size - 2: 
-        up = pixel[y-1][x]
-        down = pixel[y+1][x]
-        left = pixel[y][x-1]
-        right = pixel[y][x+1]
-        if up <= down and up <= left and up <= right:
-            canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
-            y = y - 1
-        elif down <= up and down <= left and down <= right:
-            canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
-            y = y + 1
-        elif left <= up and left <= down and left <= right:
-            canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
-            x = x - 1
-        elif right <= up and right <= down and right <= left:
-            canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
-            x = x + 1
-        canvas.itemconfig(case[x][y], fill=rgb((0,255,0)))
 
 
 # Lancement du programme
@@ -145,9 +109,7 @@ fenetre.minsize(cote*maze_size,cote*maze_size)
 fenetre.maxsize(cote*maze_size,cote*maze_size)
 canvas.pack()
 init()
-dessiner()
-score_boxes(pixel)
-maze_solver()
+draw()
 print(""" 
     ======================
         maze generator
